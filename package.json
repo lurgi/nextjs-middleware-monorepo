@@ -7,7 +7,8 @@
     "install:test-app": "pnpm install --filter next-test-app",
     "install:lib": "pnpm install --filter next-middleware-enhancer",
     "build": "pnpm --filter next-middleware-enhancer build",
-    "test": "pnpm --filter next-middleware-enhancer test"
+    "test": "pnpm --filter next-middleware-enhancer test",
+    "test:e2e": "pnpm --filter next-test-app test:e2e"
   },
   "keywords": [],
   "author": "",
