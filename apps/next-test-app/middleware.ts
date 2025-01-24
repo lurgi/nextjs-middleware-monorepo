@@ -1,5 +1,5 @@
+import { createMiddleware } from "next-middleware-enhancer";
 import { NextRequest, NextResponse } from "next/server";
-import { createMiddleware } from "../../packages/next-middleware-enhancer/src/createMiddleware";
 
 const authMiddleware = (req: NextRequest) => {
   if (!req.headers.get("Authorization")) {
