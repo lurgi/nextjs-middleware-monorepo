@@ -1,20 +1,26 @@
 {
   "name": "next-middleware-enhancer",
   "description": "Enhance Next.js middleware with ease",
-  "license": "MIT",
-  "version": "1.0.0",
-  "type": "module",
-  "main": "dist/next-middleware-enhancer.cjs.js",
-  "module": "dist/next-middleware-enhancer.es.js",
-  "types": "dist/index.d.ts",
   "author": "Jeongwoo Park lurgi9710@gmail.com",
+  "license": "MIT",
+  "version": "1.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/lurgi/nextjs-middleware-monorepo"
   },
+  "type": "module",
+  "main": "dist/next-middleware-enhancer.cjs.js",
+  "module": "dist/next-middleware-enhancer.es.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/next-middleware-enhancer.es.js",
+      "require": "./dist/next-middleware-enhancer.cjs.js"
+    }
+  },
   "publishConfig": {
     "access": "public"
   },
