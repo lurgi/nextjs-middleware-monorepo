@@ -9,7 +9,8 @@
     "build": "pnpm --filter next-middleware-enhancer build",
     "test:api": "pnpm --filter next-middleware-enhancer test",
     "test:e2e": "pnpm --filter next-test-app test:e2e",
-    "test": "pnpm run test:api && pnpm run test:e2e"
+    "test": "pnpm run test:api && pnpm run test:e2e",
+    "publish": "pnpm --filter next-middleware-enhancer publish"
   },
   "keywords": [],
   "author": "",

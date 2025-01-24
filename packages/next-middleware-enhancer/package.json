@@ -20,7 +20,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest --run",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "publish": "npm publish"
   },
   "devDependencies": {
     "@vitest/ui": "^3.0.3",
