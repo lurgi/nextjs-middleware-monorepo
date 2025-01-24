@@ -189,4 +189,39 @@ describe("createMiddleware", () => {
       expect(dynamicMiddleware).not.toHaveBeenCalled();
     });
   });
+
+  test("createMiddleware - supports multiple async middleware functions", () => {
+    describe("should execute async middleware in sequence and return final response", async () => {
+      const executionOrder: string[] = [];
+
+      const middlewareConfig = createMiddleware([
+        {
+          matcher: "/api/async",
+          handler: [
+            async (req) => {
+              await new Promise((resolve) => setTimeout(resolve, 50));
+              executionOrder.push("middleware-1");
+            },
+            async (req) => {
+              await new Promise((resolve) => setTimeout(resolve, 50));
+              executionOrder.push("middleware-2");
+            },
+            async (req) => {
+              await new Promise((resolve) => setTimeout(resolve, 50));
+              executionOrder.push("middleware-3");
+              return NextResponse.json({ message: "Final response" });
+            },
+          ],
+        },
+      ]);
+
+      const req = new NextRequest(new URL("http://localhost/api/async"));
+      const res = await middlewareConfig.middleware(req);
+
+      expect(res.status).toBe(200);
+      expect(await res.json()).toEqual({ message: "Final response" });
+
+      expect(executionOrder).toEqual(["middleware-1", "middleware-2", "middleware-3"]);
+    });
+  });
 });
