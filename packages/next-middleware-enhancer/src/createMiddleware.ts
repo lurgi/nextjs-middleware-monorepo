@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-type MiddlewareFunction = (req: NextRequest) => NextResponse | void;
+type MiddlewareFunction = (req: NextRequest) => NextResponse | Promise<NextResponse> | void | Promise<void>;
 type MiddlewareConfig = { matcher: string; handler: MiddlewareFunction | MiddlewareFunction[] };
 type MiddlewareList = MiddlewareConfig[];
 
@@ -12,13 +12,13 @@ type MiddlewareList = MiddlewareConfig[];
  */
 export function createMiddleware(middlewareList: MiddlewareList) {
   return {
-    middleware: (req: NextRequest) => {
+    middleware: async (req: NextRequest) => {
       for (const { matcher, handler } of middlewareList) {
         if (matchRoute(req.nextUrl.pathname, matcher)) {
           const handlers = Array.isArray(handler) ? handler : [handler];
 
           for (const middleware of handlers) {
-            const response = middleware(req);
+            const response = await middleware(req);
             if (response) return response;
           }
         }
