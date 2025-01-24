@@ -1,24 +1,33 @@
+import { NextRequest, NextResponse } from "next/server";
 import { createMiddleware } from "../../packages/next-middleware-enhancer/src/createMiddleware";
-import { NextResponse } from "next/server";
 
-const authMiddleware = (req: Request) => {
+const authMiddleware = (req: NextRequest) => {
   if (!req.headers.get("Authorization")) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    const res = NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    res.headers.set("X-Test-Middleware", "executed");
+    return res;
   }
-  return NextResponse.next();
+  const res = NextResponse.next();
+  res.headers.set("X-Test-Middleware", "executed");
+  return res;
 };
 
-const logMiddleware = (req: Request) => {
-  console.log(`Request to: ${req.url}`);
-  return NextResponse.next();
+const logMiddleware = () => {
+  const res = NextResponse.next();
+  res.headers.set("X-Test-Middleware", "executed");
+  return res;
 };
 
 const dynamicMiddleware = () => {
-  return NextResponse.json({ message: "Matched dynamic route" }, { status: 200 });
+  const res = NextResponse.json({ message: "Matched dynamic route" }, { status: 200 });
+  res.headers.set("X-Test-Middleware", "executed");
+  return res;
 };
 
-export default createMiddleware([
-  { matcher: "/api/admin/:path*", handler: authMiddleware },
-  { matcher: "/api/logs/:path*", handler: logMiddleware },
-  { matcher: "/api/user/:id", handler: dynamicMiddleware },
+const { middleware, config } = createMiddleware([
+  { matcher: "/admin", handler: authMiddleware },
+  { matcher: "/logs/:path*", handler: logMiddleware },
+  { matcher: "/user/:id", handler: dynamicMiddleware },
 ]);
+
+export { middleware, config };
