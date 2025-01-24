@@ -45,8 +45,8 @@ describe("createMiddleware", () => {
       ];
 
       describe("middleware response validation", () => {
-        requests.forEach(({ request, expectedStatus }) => {
-          const response = middleware(request);
+        requests.forEach(async ({ request, expectedStatus }) => {
+          const response = await middleware(request);
           expect(response.status).toBe(expectedStatus);
         });
       });
@@ -56,17 +56,17 @@ describe("createMiddleware", () => {
       });
     });
 
-    describe("when a request matches the /api/logs/:path* route", () => {
+    describe("when a request matches the /api/logs/:path* route", async () => {
       const request = new NextRequest(new URL("http://localhost/api/logs/system"), {});
-      const response = middleware(request);
+      const response = await middleware(request);
 
       expect(response.status).toBe(200);
       expect(logMiddleware).toHaveBeenCalledTimes(1);
     });
 
-    describe("when a request does not match any defined middleware routes", () => {
+    describe("when a request does not match any defined middleware routes", async () => {
       const request = new NextRequest(new URL("http://localhost/api/user"), {});
-      const response = middleware(request);
+      const response = await middleware(request);
 
       expect(response.status).toBe(200);
     });
@@ -83,8 +83,8 @@ describe("createMiddleware", () => {
         new NextRequest(new URL("http://localhost/api/user/456"), {}),
       ];
 
-      matchedRequests.forEach((request) => {
-        const response = middleware(request);
+      matchedRequests.forEach(async (request) => {
+        const response = await middleware(request);
         expect(response.status).toBe(200);
       });
 
@@ -97,8 +97,8 @@ describe("createMiddleware", () => {
         new NextRequest(new URL("http://localhost/api/admin/789"), {}),
       ];
 
-      unmatchedRequests.forEach((request) => {
-        const response = middleware(request);
+      unmatchedRequests.forEach(async (request) => {
+        const response = await middleware(request);
         expect(response.status).toBe(200);
       });
 
@@ -138,8 +138,8 @@ describe("createMiddleware", () => {
       ];
 
       describe("middleware response validation", () => {
-        requests.forEach(({ request, expectedStatus }) => {
-          const response = middleware(request);
+        requests.forEach(async ({ request, expectedStatus }) => {
+          const response = await middleware(request);
           expect(response.status).toBe(expectedStatus);
         });
       });
@@ -179,8 +179,8 @@ describe("createMiddleware", () => {
         new NextRequest(new URL("http://localhost/home"), {}),
       ];
 
-      unmatchedRequests.forEach((request) => {
-        const response = middleware(request);
+      unmatchedRequests.forEach(async (request) => {
+        const response = await middleware(request);
         expect(response.status).toBe(200); // NextResponse.next()가 반환되어야 함
       });
 
