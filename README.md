@@ -45,6 +45,34 @@ const { middleware, config } = createMiddleware([{ matcher: "/admin", handler: a
 export { middleware, config };
 ```
 
+🛠 Usage (Multiple Handlers)
+Apply multiple middleware functions sequentially for a route:
+
+```ts
+import { NextRequest, NextResponse } from "next/server";
+import { createMiddleware } from "next-middleware-enhancer";
+
+const logMiddleware = (req: NextRequest) => console.log(`Request: ${req.nextUrl.pathname}`);
+
+const authMiddleware = (req: NextRequest) => {
+  if (!req.headers.get("Authorization")) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+};
+
+const adminMiddleware = (req: NextRequest) => {
+  if (req.headers.get("Authorization") !== "admin-secret")
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+};
+
+const { middleware, config } = createMiddleware([
+  { matcher: "/admin", handler: [logMiddleware, authMiddleware, adminMiddleware] },
+]);
+
+export { middleware, config };
+```
+
+Execution Flow:
+1️⃣ Logs request path → 2️⃣ Checks auth → 3️⃣ Verifies admin access 🚀
+
 ---
 
 ## 📖 API Reference
@@ -56,7 +84,7 @@ Creates a Next.js middleware function that applies the specified middleware hand
 #### **Parameters**
 
 ```ts
-type MiddlewareFunction = (req: NextRequest) => NextResponse | void;
+type MiddlewareFunction = (req: NextRequest) => NextResponse | Promise<NextResponse> | void | Promise<void>;
 type MiddlewareConfig = { matcher: string; handler: MiddlewareFunction | MiddlewareFunction[] };
 type MiddlewareList = MiddlewareConfig[];
 ```
