@@ -12,6 +12,9 @@
     "type": "git",
     "url": "https://github.com/lurgi/nextjs-middleware-monorepo"
   },
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public"
   },
