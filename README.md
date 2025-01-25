@@ -84,7 +84,7 @@ Creates a Next.js middleware function that applies the specified middleware hand
 #### **Parameters**
 
 ```ts
-type MiddlewareFunction = (req: NextRequest) => NextResponse | Promise<NextResponse> | void | Promise<void>;
+type MiddlewareFunction = (req: NextRequest) => NextResponse | void | Promise<NextResponse | void>;
 type MiddlewareConfig = { matcher: string; handler: MiddlewareFunction | MiddlewareFunction[] };
 type MiddlewareList = MiddlewareConfig[];
 ```
